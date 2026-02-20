@@ -10,8 +10,26 @@ function App() {
   useEffect(() => {
     fetch("/api")
       .then((res) => res.json())
-      .then((data) => setMessage(data.message));
+      .then((data) => {
+        setMessage(data.message);
+        setCount(data.number);
+        console.log('Running GET');
+      });
   }, []);
+
+  const increment = () => {
+    const newCount = count + 1;
+    console.log('Running POST');
+    fetch("/api", {
+      method: 'POST',
+      headers: {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ number: newCount })
+    });
+    setCount(newCount);
+  };
 
   return (
     <>
@@ -25,7 +43,7 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+        <button onClick={() => increment()}>
           count is {count}
         </button>
         <p>
